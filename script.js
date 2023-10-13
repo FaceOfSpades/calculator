@@ -28,6 +28,7 @@ let btnValue = "";
 let decimalToggle = false;
 let answer = "";
 let equalsFlag = false;
+let operatorFlag = false;
 
 const numberBtn = document.querySelector(".numbers");
 const operateBtn = document.querySelector(".operators")
@@ -45,6 +46,7 @@ buttons.forEach((e) => {
 });
 
 numberBtn.addEventListener("click", () => {
+    operatorFlag = false;
     if (equalsFlag == true) {
         clearDisplay();
         clearMemory();
@@ -60,6 +62,8 @@ numberBtn.addEventListener("click", () => {
 
 operateBtn.addEventListener("click", () => {
     equalsFlag = false;
+    decimalToggle = false;
+    operatorFlag = true;
     if (operator === "") {
         operator = btnValue;
     } else {
@@ -70,8 +74,9 @@ operateBtn.addEventListener("click", () => {
 });
 
 backspace.addEventListener("click", () => {
-    if (num2 == "")
-    {
+    if (equalsFlag == true || operatorFlag == true) {
+//do nothing
+    } else if (num2 == "") {
         num1 = num1.slice(0, -1);
         clearDisplay();
         display(num1);
@@ -81,8 +86,8 @@ backspace.addEventListener("click", () => {
         display(num1);
         display(operator);
         display(num2);
-    }
-})
+    };
+});
 
 decimal.addEventListener("click", () => {
     if (decimalToggle == true) {
@@ -102,11 +107,13 @@ clearBtn.addEventListener("click", () => {
     clearDisplay();
     clearMemory();
     decimalToggle = false;
+    operatorFlag = false;
+    equalsFlag = false;
 });
 
 equalsBtn.addEventListener("click", () => {
     if (num1 == "" || num2 == "" || operator == "") {
-
+//do nothing
     } else {
         operate();
         equalsFlag = true;
@@ -129,6 +136,7 @@ function operate() {
     };
     clearDisplay();
     clearMemory();
+    answer = Math.round(answer * 100) / 100;
     display(answer);
     num1 = answer;
 }
